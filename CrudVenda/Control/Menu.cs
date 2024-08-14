@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CrudVenda.Control;
+﻿namespace CrudVenda.Control;
 
 class Menu
 {
@@ -32,7 +26,16 @@ class Menu
                 i.RenderTitle();
                 first = false;
             }
-            i.SelfRender();
+
+            if (i.IsMarked)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine(i);
+                Console.ResetColor();
+                continue;
+            }
+
+            Console.WriteLine(i);
         }
     }
 
