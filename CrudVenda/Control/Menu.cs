@@ -2,11 +2,11 @@
 
 class Menu
 {
-    private readonly MenuItem[] _menuItems;
+    private readonly IMenuItem[] _menuItems;
     private int _indexMarked = 0;
 
 
-    public Menu(MenuItem[] menuItems)
+    public Menu(IMenuItem[] menuItems)
     {
         _menuItems = menuItems;
         _menuItems[0].IsMarked = true;
@@ -39,7 +39,7 @@ class Menu
         }
     }
 
-    private MenuItem? SetItem(ConsoleKeyInfo tecla)
+    private IMenuItem? SetItem(ConsoleKeyInfo tecla)
     {
 
         if (tecla.Key == ConsoleKey.DownArrow)
@@ -77,7 +77,7 @@ class Menu
         return _menuItems[_indexMarked];
     }
 
-    public MenuItem GetOption()
+    public IMenuItem GetOption()
     {
         Render();
 

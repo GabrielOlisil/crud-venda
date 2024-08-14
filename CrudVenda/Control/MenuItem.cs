@@ -1,6 +1,6 @@
 ﻿namespace CrudVenda.Control;
 
-class MenuItem
+class MenuItem : IMenuItem
 {
     public bool IsMarked { get; set; } = false;
     public string? Name { get; set; }
@@ -16,31 +16,31 @@ class MenuItem
         return $"{ShortPad(Id.ToString() ?? "")} | {MediumPad(Description ?? "")} | {ShortPad(Name ?? "")} ";
     }
 
-    public virtual void RenderTitle()
+    public void RenderTitle()
     {
         Console.WriteLine(ShortPad("Id") + " | " + MediumPad("Descrição") + " | " + ShortPad("Nome"));
         Console.WriteLine(ShortPad("", '_') + " | " + MediumPad("", '_') + " | " + ShortPad("", '_'));
     }
 
 
-    private static string MediumPad(string value)
+    private string MediumPad(string value)
     {
         return (value.Length > 20 ? value[..17] + "..." : value).PadRight(20);
     }
 
-    private static string MediumPad(string value, char character)
+    private string MediumPad(string value, char character)
     {
         return (value.Length > 20 ? value[..17] + "..." : value).PadRight(20, character);
     }
 
 
 
-    private static string ShortPad(string value)
+    private string ShortPad(string value)
     {
         return (value.Length > 13 ? value[..10] + "..." : value).PadRight(13);
     }
 
-    private static string ShortPad(string value, char character)
+    private string ShortPad(string value, char character)
     {
         return (value.Length > 13 ? value[..10] + "..." : value).PadRight(13, character);
     }
