@@ -22,18 +22,42 @@ class MenuItem
         {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
 
-            Console.WriteLine($"{(Description.Length > 13 ? Description.Substring(0, 10) + "..." : Description).PadRight(13)} | {Name?.PadRight(10)} ");
+            Console.WriteLine($"{MediumPad(Description)} | {ShortPad(Name)} ");
             Console.ResetColor();
             return;
         }
-        Console.WriteLine($"{(Description.Length > 13 ? Description.Substring(0, 10) + "..." : Description).PadRight(13)} | {Name?.PadRight(10)} ");
+        Console.WriteLine($"{MediumPad(Description)} | {ShortPad(Name)} ");
 
         return;
     }
 
     public virtual void RenderTitle()
     {
-        Console.WriteLine("Nome");
+        Console.WriteLine(MediumPad("Descrição") + " | " + ShortPad("Nome"));
+        Console.WriteLine(MediumPad("", '_') + " | " + ShortPad("", '_'));
+    }
+
+
+    private static string MediumPad(string value)
+    {
+        return (value.Length > 20 ? value.Substring(0, 17) + "..." : value).PadRight(20);
+    }
+
+    private static string MediumPad(string value, char character)
+    {
+        return (value.Length > 20 ? value.Substring(0, 17) + "..." : value).PadRight(20, character);
+    }
+
+
+
+    private static string ShortPad(string value)
+    {
+        return (value.Length > 13 ? value.Substring(0, 10) + "..." : value).PadRight(13);
+    }
+
+    private static string ShortPad(string value, char character)
+    {
+        return (value.Length > 13 ? value.Substring(0, 10) + "..." : value).PadRight(13, character);
     }
 
 
