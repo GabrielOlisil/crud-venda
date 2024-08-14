@@ -11,6 +11,7 @@ class Menu
     private readonly MenuItem[] _menuItems;
     private int _indexMarked = 0;
 
+
     public Menu(MenuItem[] menuItems)
     {
         _menuItems = menuItems;
@@ -19,18 +20,19 @@ class Menu
 
     private void Render()
     {
+        var first = true;
         Console.Clear();
+
+
         foreach (var i in _menuItems)
         {
-            Console.ResetColor();
-            if (i.IsMarked)
+
+            if (first)
             {
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine(i.Name);
-                Console.ResetColor();
-                continue;
+                i.RenderTitle();
+                first = false;
             }
-            Console.WriteLine(i.Name);
+            i.SelfRender();
         }
     }
 
@@ -39,19 +41,17 @@ class Menu
 
         if (tecla.Key == ConsoleKey.DownArrow)
         {
-
             if (_indexMarked == _menuItems.Length - 1)
             {
                 return null;
             }
+
             _menuItems[_indexMarked].IsMarked = false;
             _menuItems[++_indexMarked].IsMarked = true;
 
             Render();
             return null;
         }
-
-
 
         if (tecla.Key == ConsoleKey.UpArrow)
         {

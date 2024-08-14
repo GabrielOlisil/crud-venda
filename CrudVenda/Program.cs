@@ -3,16 +3,15 @@
 
 var menuitens = new MenuItem[]
 {
-    new MenuItem { Name = "test" },
-    new MenuItem { Name = "test2" },
-    new MenuItem { Name = "test3" },
-    new MenuItem { Name = "test4" },
-    new MenuItem { Name = "test5" }
+    new MenuItem { Name = "test", Description = "Chamaaa" },
+    new MenuItem { Name = "test2", Description = "Chamaaa1221aaaaaaaaaaaaa2" },
+    new MenuItem { Name = "test3", Description = "Chamaaa1111" },
+    new MenuItem { Name = "test4", Description = "Chamaaaaaaa" },
+    new MenuItem { Name = "test5", Description = "Chamaaa" }
 };
 
-Menu menu = new Menu(menuitens);
+Menu menu = new(menuitens);
 
 var op = menu.GetOption();
 
 
-Console.WriteLine("Voce escolheu esta opção:" + op.Name);
