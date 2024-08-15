@@ -10,13 +10,14 @@ namespace CrudVenda.Entities
 {
     internal class Servico : IMenuItem
     {
+        public bool IsMarked { get; set; } = false;
+
         public int Numero { get; set; }
         public double Valor { get; set; }
 
         public string Descricao { get; set; }
 
         public string Tempo { get; set; }
-        public bool IsMarked { get; set; } = false;
 
         public void RenderTitle()
         {
