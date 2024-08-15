@@ -11,13 +11,13 @@ namespace CrudVenda.Entities
         public int Numero { get; set; }
         public double Valor { get; set; }
 
-        public DateTime DataVencimento   {  get; set; }
+        public DateTime DataVencimento { get; set; }
 
         public DateTime DataPagamento { get; set; }
 
         public int NumeroPagamento { get; private set; }
 
-        public string StatusDespesa { get; set; }
+        public string? StatusDespesa { get; set; }
 
         public override string ToString()
         {
