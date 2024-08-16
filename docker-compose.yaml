@@ -1,0 +1,12 @@
+version: '2.29.0'
+
+services:
+  db:
+    image: mysql:8.0.39-bookworm
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+    - ./script.sql:/docker-entrypoint-initdb.d/inicializacao.sql
+    ports:
+    - 3306:3306

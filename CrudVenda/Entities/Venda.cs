@@ -1,5 +1,6 @@
 using System;
 using CrudVenda.Control;
+using CrudVenda.Helpers;
 
 namespace CrudVenda.Entities;
 
@@ -13,11 +14,12 @@ public class Venda : IMenuItem
 
     public void RenderTitle()
     {
-        System.Console.WriteLine("Numero | Valor | Quantidade");
+        Console.WriteLine($"{PadHelper.ShortPad("Numero")} | {PadHelper.ShortPad("Valor")} | {PadHelper.ShortPad("Quantidade")}");
+        Console.WriteLine($"{PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')}");
     }
 
     public override string ToString()
     {
-        return $"{Numero} | {Valor} | {Quantidade}";
+        return $"{PadHelper.ShortPad(Numero.ToString())} | {PadHelper.ShortPad(Valor.ToString())} | {PadHelper.ShortPad(Quantidade.ToString())}";
     }
 }
