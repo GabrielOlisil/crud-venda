@@ -5,6 +5,8 @@ class Menu
     private readonly IMenuItem[] _menuItems;
     private int _indexMarked = 0;
 
+    private readonly string? _title;
+
 
     public Menu(IMenuItem[] menuItems)
     {
@@ -12,10 +14,21 @@ class Menu
         _menuItems[0].IsMarked = true;
     }
 
+    public Menu(IMenuItem[] menuItems, string title) : this(menuItems)
+    {
+        _title = title;
+    }
+
+
     private void Render()
     {
         var first = true;
         Console.Clear();
+
+        if (_title is not null)
+        {
+            Console.WriteLine(_title);
+        }
 
 
         foreach (var i in _menuItems)

@@ -15,11 +15,9 @@ var desconto = Convert.ToDouble(Console.ReadLine());
 Console.WriteLine("Informe o tipo");
 var tipo = Console.ReadLine();
 
-Console.WriteLine("Selecione o Cliente");
-
 var clientes = ClienteDAO.List();
 
-var menu = new Menu(clientes.ToArray());
+var menu = new Menu(clientes.ToArray(), "Selecione o Cliente");
 
 var cliente = menu.GetOption() as Cliente;
 
