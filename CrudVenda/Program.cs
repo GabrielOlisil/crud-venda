@@ -3,56 +3,78 @@ using CrudVenda.Entities;
 using CrudVenda.Conection;
 using CrudVenda.Dao;
 
+Console.Clear();
+
+
+Console.WriteLine("Realizar venda");
+Console.WriteLine("Insira o valor da venda");
+var valor = Convert.ToDouble(Console.ReadLine());
+Console.WriteLine("Insira o desconto");
+var desconto = Convert.ToDouble(Console.ReadLine());
+
+Console.WriteLine("Informe o tipo");
+var tipo = Console.ReadLine();
+
+Console.WriteLine("Selecione o Cliente");
+
+var clientes = ClienteDAO.List();
+
+var menu = new Menu(clientes.ToArray());
+
+var cliente = menu.GetOption() as Cliente;
+
+var venda = new Venda
+{
+    Cliente = cliente,
+    ValorTotal = valor,
+    Desconto = desconto,
+    Tipo = tipo,
+    DataVenda = DateTime.Now,
+    Hora = DateTime.Now.ToString("HH:mm:ss")
+};
+
+VendaDAO.Insert(venda);
+
+Console.ReadKey();
+
+Console.Clear();
+
+var vendas = VendaDAO.List();
+
+if (vendas is not null)
+{
+    vendas[0].RenderTitle();
+
+    foreach (var itens in vendas)
+    {
+        Console.WriteLine(itens);
+    }
+}
+
+
+// var cliente = ClienteDAO.Read(1);
+
+
+// var venda = new Venda
+// {
+//     DataVenda = new DateTime(2024, 12, 13),
+//     Hora = "12:00",
+//     ValorTotal = 200,
+//     Desconto = 0,
+//     Tipo = "Sei la po",
+//     Cliente = cliente
+// };
+
+// VendaDAO.Insert(venda);
 
 
 
-ServicoDAO.Read();
-
-//var servico = new Servico()
-//{
-//    Descricao = "Lavagem de Carro",
-//    Tempo = "00:30:00",
-//    Valor = 50.00
-//};
-
-//ServicoDAO.Insert(servico);
+// var list = VendaDAO.List();
 
 
+// list[0].RenderTitle();
 
-
-//var menuitens = new MenuItem[]
-//{
-//    new MenuItem { Name = "test", Description = "Chamaaa", Id = 1 },
-//    new MenuItem { Name = "test2", Description = "Chamaaa1221aaaaaaaaaaaaa2", Id = 2 },
-//    new MenuItem { Name = "test3", Description = "999999999999999909999", Id = 3 },
-//    new MenuItem { Name = "test4", Description = "Chamaaaaaaa", Id = 4 },
-//    new MenuItem { Name = "test5", Id = 5 }
-//};
-
-//Menu menu = new(menuitens);
-
-//var op = menu.GetOption() as MenuItem;
-
-//Console.WriteLine(op.Name);
-
-
-
-//var vendaMenuItens = new Venda[]{
-//    new Venda{Numero = 1, Quantidade = 23, Valor = 12.42},
-//    new Venda{Numero = 2, Quantidade = 2, Valor = 12.42},
-//    new Venda{Numero = 3, Quantidade = 223, Valor = 12.42},
-//    new Venda{Numero = 4, Quantidade = 234, Valor = 12.42}
-//};
-
-//Console.ReadKey();
-
-//var menuVenda = new Menu(vendaMenuItens);
-
-
-//var opVenda = menuVenda.GetOption() as Venda;
-
-
-//System.Console.WriteLine(opVenda);
-
-
-
+// foreach (var item in list)
+// {
+//     Console.WriteLine(item);
+// }

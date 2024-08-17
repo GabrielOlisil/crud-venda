@@ -6,7 +6,7 @@ public static class Conexao
 {
 
     static MySqlConnection _connection;
-    private static string connString = "server=localhost;uid=root;pwd=root;database=vendas_gestao;port=3360";
+    private static string connString = "server=localhost;uid=root;pwd=example;database=vendas_gestao;port=3306";
 
     public static MySqlConnection Connect()
     {
@@ -21,7 +21,7 @@ public static class Conexao
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Erro ao conectar com o banco de dadoss");
+            Console.WriteLine("Erro ao conectar com o banco de dadoss" + ex.Message);
         }
 
         return _connection;
@@ -29,7 +29,10 @@ public static class Conexao
 
     public static void FecharConexao()
     {
-        _connection.Close();
+        if (_connection != null)
+        {
+            _connection.Close();
+        }
     }
 
 }

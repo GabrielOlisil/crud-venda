@@ -8,18 +8,27 @@ public class Venda : IMenuItem
 {
     public bool IsMarked { get; set; } = false;
 
-    public int Numero { get; set; }
-    public int Quantidade { get; set; }
-    public double Valor { get; set; }
+    public int Id { get; set; }
+    public DateTime? DataVenda { get; set; }
+    public double? Desconto { get; set; }
+    public double? ValorTotal { get; set; }
+    public string? Hora { get; set; }
+    public string? Tipo { get; set; }
+
+    public Cliente? Cliente { get; set; }
 
     public void RenderTitle()
     {
-        Console.WriteLine($"{PadHelper.ShortPad("Numero")} | {PadHelper.ShortPad("Valor")} | {PadHelper.ShortPad("Quantidade")}");
-        Console.WriteLine($"{PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')}");
+        Console.WriteLine($"{PadHelper.ShortPad("ID")} | {PadHelper.ShortPad("Data")} | {PadHelper.ShortPad("Desconto")} | {PadHelper.ShortPad("Valor Total")} | {PadHelper.ShortPad("Hora")} | {PadHelper.ShortPad("Tipo")} | {PadHelper.MediumPad("Cliente")} ");
+
+
+        Console.WriteLine($"{PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.MediumPad("", '_')}");
+
     }
 
     public override string ToString()
     {
-        return $"{PadHelper.ShortPad(Numero.ToString())} | {PadHelper.ShortPad(Valor.ToString())} | {PadHelper.ShortPad(Quantidade.ToString())}";
+        return $"{PadHelper.ShortPad(Id.ToString())} | {PadHelper.ShortPad(DataVenda?.ToString("yyyy/MM/dd") ?? "")} | {PadHelper.ShortPad(Desconto.ToString() ?? "")} | {PadHelper.ShortPad(ValorTotal.ToString() ?? "")} | {PadHelper.ShortPad(Hora ?? "")} | {PadHelper.ShortPad(Tipo ?? "")} | {PadHelper.MediumPad(Cliente?.Nome ?? "")} ";
+
     }
 }
