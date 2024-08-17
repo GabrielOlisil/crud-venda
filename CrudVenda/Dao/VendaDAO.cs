@@ -84,6 +84,10 @@ namespace CrudVenda.Dao
             {
                 Console.WriteLine(ex.Message);
             }
+            finally
+            {
+                Conexao.FecharConexao();
+            }
             return list;
         }
     }

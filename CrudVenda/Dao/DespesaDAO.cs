@@ -75,6 +75,10 @@ namespace CrudVenda.Dao
 
             }
             catch (Exception ex) { }
+            finally
+            {
+                Conexao.FecharConexao();
+            }
             return list;
         }
     }

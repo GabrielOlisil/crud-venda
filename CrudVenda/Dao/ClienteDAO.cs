@@ -76,6 +76,10 @@ public class ClienteDAO
         {
             Console.WriteLine(ex.Message);
         }
+        finally
+        {
+            Conexao.FecharConexao();
+        }
 
 
 
