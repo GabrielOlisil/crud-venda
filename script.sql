@@ -21,7 +21,7 @@ CREATE TABLE caixa(
     total_saidas DOUBLE,
     saldo_final DOUBLE,
     status_caixa VARCHAR(255),
-    fk_funcionario INT,
+    fk_funcionario INT NOT NULL,
     FOREIGN KEY (fk_funcionario) REFERENCES funcionario(id_funcionario)
 );
 
