@@ -17,9 +17,20 @@ var tipo = Console.ReadLine();
 
 var clientes = ClienteDAO.List();
 
-var menu = new Menu(clientes.ToArray(), "Selecione o Cliente");
+Console.WriteLine("Deseja incluir o cliente??");
 
-var cliente = menu.GetOption() as Cliente;
+var optionCli = Console.ReadLine();
+
+Cliente? cliente = null;
+
+if (optionCli != "n")
+{
+    var menu = new Menu(clientes.ToArray(), "Selecione o Cliente");
+    cliente = menu.GetOption() as Cliente;
+}
+
+
+
 
 var venda = new Venda
 {

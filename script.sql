@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS vendas_gestao CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;;
+CREATE DATABASE IF NOT EXISTS vendas_gestao;
 USE vendas_gestao;
 
 CREATE TABLE funcionario (
@@ -91,4 +91,7 @@ CREATE TABLE encargo (
     fk_recebimento INT,
     FOREIGN KEY (fk_recebimento) REFERENCES recebimento(id_recebimento)
 );
+
+insert into cliente (nome, cpf, email, telefone, data_nascimento) values ('Theo Theodoro Novais', '02920920909', 'theo.tn@gmail.com', '920940928', '2005-10-21');
+insert into cliente (nome, cpf, email, telefone, data_nascimento) values ('Gabriel de Oliveira Silva', '2092423523', 'gabriel.dos@gmail.com', '920940928', '2004-09-26');
 

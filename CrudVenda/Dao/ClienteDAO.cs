@@ -44,7 +44,7 @@ public class ClienteDAO
         return list;
     }
 
-    public static Cliente? Read(int id)
+    public static Cliente? FindById(int id)
     {
         const string query = $"select * from cliente where id_cliente = @id";
 
