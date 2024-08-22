@@ -94,4 +94,5 @@ CREATE TABLE encargo (
 
 insert into cliente (nome, cpf, email, telefone, data_nascimento) values ('Theo Theodoro Novais', '02920920909', 'theo.tn@gmail.com', '920940928', '2005-10-21');
 insert into cliente (nome, cpf, email, telefone, data_nascimento) values ('Gabriel de Oliveira Silva', '2092423523', 'gabriel.dos@gmail.com', '920940928', '2004-09-26');
-
+insert into funcionario(nome,cpf) values ('Joaquin Buckley','02202464670');
+select * from funcionario;
