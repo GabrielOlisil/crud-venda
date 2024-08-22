@@ -15,7 +15,7 @@ namespace CrudVenda.Dao
 
         public static void Insert(Venda venda)
         {
-            const string sql = "INSERT INTO venda (data_venda, hora, valor_total, desconto, tipo, fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @tipo, @clienteId)";
+            const string sql = "INSERT INTO venda (data_venda, hora, valor_total, desconto, tipo, total_parcelas , fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @tipo,, @totalParcelas, @clienteId)";
 
             try
             {
@@ -29,6 +29,7 @@ namespace CrudVenda.Dao
                 command.Parameters.AddWithValue("@valorTotal", venda.ValorTotal);
                 command.Parameters.AddWithValue("@desconto", venda.Desconto);
                 command.Parameters.AddWithValue("@tipo", venda.Tipo);
+                command.Parameters.AddWithValue("@totalParcelas", venda.TotalParcelas);
                 command.Parameters.AddWithValue("@clienteId", venda.Cliente?.Id);
                 command.ExecuteNonQuery();
             }
@@ -64,6 +65,7 @@ namespace CrudVenda.Dao
                         ValorTotal = reader.GetDouble("valor_total"),
                         Desconto = reader.GetDouble("desconto"),
                         Tipo = reader.GetString("tipo"),
+                        TotalParcelas = reader.GetInt32("total_parcelas"),
                         Cliente = new Cliente
                         {
                             Id = reader.GetInt32("id_cliente"),

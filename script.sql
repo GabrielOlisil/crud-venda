@@ -56,6 +56,7 @@ CREATE TABLE venda (
     data_venda DATE,
     hora TIME,
     valor_total DOUBLE,
+    total_parcelas int,
     desconto DOUBLE,
     tipo VARCHAR(200),
     fk_cliente INT,
@@ -101,4 +102,4 @@ insert into caixa(saldo_inicial,
     total_saidas,
     saldo_final ,
     status_caixa,
-    fk_funcionario) VALUES(0,0,0,0,'Aberto',1)
+    fk_funcionario) VALUES(0,0,0,0,'Aberto',1);

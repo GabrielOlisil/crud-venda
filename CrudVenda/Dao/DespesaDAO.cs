@@ -27,7 +27,7 @@ namespace CrudVenda.Dao
                 command.Parameters.AddWithValue("@data_vencimento", despesa.DataVencimento);
                 command.Parameters.AddWithValue("@data_pagamento", despesa.DataPagamento);
                 command.Parameters.AddWithValue("@status_despesa", despesa.StatusDespesa);
-                command.Parameters.AddWithValue("@fk_caixa", despesa.CaixaD);
+                command.Parameters.AddWithValue("@fk_caixa", despesa.Caixa);
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -40,7 +40,7 @@ namespace CrudVenda.Dao
             }
         }
 
-        public static List<Despesa> Read()
+        public static List<Despesa> FindById()
         {
 
             var list = new List<Despesa>();

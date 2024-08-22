@@ -9,6 +9,7 @@ public class Venda : IMenuItem
     public bool IsMarked { get; set; } = false;
 
     public int Id { get; set; }
+    public int? TotalParcelas { get; set; }
     public DateTime? DataVenda { get; set; }
     public double? Desconto { get; set; }
     public double? ValorTotal { get; set; }
