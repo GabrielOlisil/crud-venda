@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS vendas_gestao;
-USE vendas_gestao;
+CREATE DATABASE IF NOT EXISTS vendas_gestao1;
+USE vendas_gestao1;
 
 CREATE TABLE funcionario (
     id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
@@ -95,4 +95,10 @@ CREATE TABLE encargo (
 insert into cliente (nome, cpf, email, telefone, data_nascimento) values ('Theo Theodoro Novais', '02920920909', 'theo.tn@gmail.com', '920940928', '2005-10-21');
 insert into cliente (nome, cpf, email, telefone, data_nascimento) values ('Gabriel de Oliveira Silva', '2092423523', 'gabriel.dos@gmail.com', '920940928', '2004-09-26');
 insert into funcionario(nome,cpf) values ('Joaquin Buckley','02202464670');
-select * from funcionario;
+select * from caixa inner join funcionario on caixa.fk_funcionario = funcionario.id_funcionario;
+insert into caixa(saldo_inicial,
+    total_entradas,
+    total_saidas,
+    saldo_final ,
+    status_caixa,
+    fk_funcionario) VALUES(0,0,0,0,'Aberto',1)
