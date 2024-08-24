@@ -5,7 +5,11 @@ using CrudVenda.Dao;
 
 Console.Clear();
 
+//teste
 
+
+
+//teste
 Console.WriteLine("Realizar venda");
 Console.WriteLine("Insira o valor da venda");
 var valor = Convert.ToDouble(Console.ReadLine());
@@ -59,6 +63,8 @@ if (vendas is not null)
         Console.WriteLine(itens);
     }
 }
+
+
 
 
 // var cliente = ClienteDAO.Read(1);

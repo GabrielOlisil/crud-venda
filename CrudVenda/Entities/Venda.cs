@@ -18,6 +18,9 @@ public class Venda : IMenuItem
 
     public Cliente? Cliente { get; set; }
 
+
+
+
     public void RenderTitle()
     {
         Console.WriteLine($"{PadHelper.ShortPad("ID")} | {PadHelper.ShortPad("Data")} | {PadHelper.ShortPad("Desconto")} | {PadHelper.ShortPad("Valor Total")} | {PadHelper.ShortPad("Hora")} | {PadHelper.ShortPad("Tipo")} | {PadHelper.MediumPad("Cliente")} ");

@@ -40,6 +40,23 @@ namespace CrudVenda.Dao
             }
         }
 
+        public void Delete(Despesa despesa)
+        {
+            try
+            {
+                string sql = "DELETE FROM despesa WHERE id_despensa = @id_despensa";
+                MySqlCommand comando = new MySqlCommand(sql, Conexao.Connect());
+                comando.Parameters.AddWithValue("@id_despensa", despesa.Id);
+                comando.ExecuteNonQuery();
+                Console.WriteLine("Despesa excluida com sucesso!");
+                Conexao.FecharConexao();
+
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"erro ao deletar o cliente {ex}");
+            }
+        }
         public static List<Despesa> FindById()
         {
 

@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,55 @@ namespace CrudVenda.Dao
 {
     internal class VendaDAO
     {
+        public static void Update(Venda venda)
+        {
+            const string query = "UPDATE venda SET id_servico = @idServico, data_venda = @dataVenda, valor_total = @valorTotal WHERE id_venda = @idVenda";
 
+            try
+            {
+                using var command = new MySqlCommand(query, Conexao.Connect());
+                command.Parameters.AddWithValue("@idCliente", venda.Id);
+                command.Parameters.AddWithValue("@idServico", venda.Cliente?.Id);
+                command.Parameters.AddWithValue("@dataVenda", venda.DataVenda);
+                command.Parameters.AddWithValue("@valorTotal", venda.ValorTotal);
+                command.Parameters.AddWithValue("@idVenda", venda.Id);
+
+                int affectedRows = command.ExecuteNonQuery();
+                if (affectedRows > 0)
+                {
+                    Console.WriteLine("Venda atualizada com sucesso.");
+                }
+                else
+                {
+                    Console.WriteLine("Nenhuma venda encontrada com o ID fornecido.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao atualizar venda: " + ex.Message);
+            }
+            finally
+            {
+                Conexao.FecharConexao();
+            }
+        }
+
+        public static void Delete(Venda venda)
+        {
+            try
+            {
+                string sql = "DELETE FROM cliente WHERE id_cliente = @idcliente ";
+                MySqlCommand comando = new MySqlCommand(sql, Conexao.Connect());
+                comando.Parameters.AddWithValue("@idcliente",venda.Cliente?.Id);
+                comando.ExecuteNonQuery();
+                Console.WriteLine("Cliente excluído com sucesso!");
+                Conexao.FecharConexao();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao excluir o cliente {ex.Message}");
+            }
+        }
         public static void Insert(Venda venda)
         {
             const string sql = "INSERT INTO venda (data_venda, hora, valor_total, desconto, tipo, total_parcelas , fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @tipo,, @totalParcelas, @clienteId)";
