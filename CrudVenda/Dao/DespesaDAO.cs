@@ -27,7 +27,7 @@ namespace CrudVenda.Dao
                 command.Parameters.AddWithValue("@data_vencimento", despesa.DataVencimento);
                 command.Parameters.AddWithValue("@data_pagamento", despesa.DataPagamento);
                 command.Parameters.AddWithValue("@status_despesa", despesa.StatusDespesa);
-                command.Parameters.AddWithValue("@fk_caixa", despesa.Caixa);
+                command.Parameters.AddWithValue("@fk_caixa", 1);
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -52,7 +52,7 @@ namespace CrudVenda.Dao
                 Conexao.FecharConexao();
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception($"erro ao deletar o cliente {ex}");
             }

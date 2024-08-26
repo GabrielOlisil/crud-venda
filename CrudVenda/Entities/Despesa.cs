@@ -19,8 +19,6 @@ namespace CrudVenda.Entities
 
         public string StatusDespesa { get; set; }
 
-        public Caixa Caixa { get; set; }
-
         public override string ToString()
         {
             return $"{Id} | {Valor} | {DataVencimento} | {DataPagamento} | {StatusDespesa}";
