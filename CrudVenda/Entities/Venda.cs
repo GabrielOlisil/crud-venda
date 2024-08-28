@@ -8,7 +8,7 @@ public class Venda : IMenuItem
 {
     public bool IsMarked { get; set; } = false;
 
-    public int Id { get; set; }
+    public ulong? Id { get; set; }
     public int? TotalParcelas { get; set; }
     public DateTime? DataVenda { get; set; }
     public double? Desconto { get; set; }
@@ -17,6 +17,8 @@ public class Venda : IMenuItem
     public string? Tipo { get; set; }
 
     public Cliente? Cliente { get; set; }
+
+    public List<Recebimento>? Recebimentos { get; set; }
 
 
 

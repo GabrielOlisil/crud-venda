@@ -26,11 +26,11 @@ CREATE TABLE caixa(
 );
 
 CREATE TABLE despesa(
-    id_despensa INT PRIMARY KEY AUTO_INCREMENT,
+    id_despesa INT PRIMARY KEY AUTO_INCREMENT,
     valor DOUBLE,
     data_vencimento DATE,
     data_pagamento DATE,
-    status_despensa VARCHAR(255),
+    status_despesa VARCHAR(255),
     fk_caixa INT,
     FOREIGN KEY (fk_caixa) REFERENCES caixa(id_caixa)
 );
@@ -101,11 +101,12 @@ insert into cliente (nome, cpf, email, telefone, data_nascimento) values ('Gabri
 insert into funcionario(nome,cpf) values ('Joaquin Buckley','02202464670');
 
 
-insert into caixa(
+insert into caixa (
     saldo_inicial,
     total_entradas,
     total_saidas,
     saldo_final ,
     status_caixa,
-    fk_funcionario) 
-    VALUES(0,0,0,0,'Aberto',1);
+    fk_funcionario
+    ) 
+    VALUES (0,0,0,0,'Aberto',1);

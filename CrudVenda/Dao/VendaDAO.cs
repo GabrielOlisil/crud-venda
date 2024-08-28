@@ -52,9 +52,9 @@ namespace CrudVenda.Dao
             {
                 string sql = "DELETE FROM cliente WHERE id_cliente = @idcliente ";
                 MySqlCommand comando = new MySqlCommand(sql, Conexao.Connect());
-                comando.Parameters.AddWithValue("@idcliente",venda.Cliente?.Id);
+                comando.Parameters.AddWithValue("@idcliente", venda.Cliente?.Id);
                 comando.ExecuteNonQuery();
-                Console.WriteLine("Cliente excluído com sucesso!");
+                Console.WriteLine("Cliente excluï¿½do com sucesso!");
                 Conexao.FecharConexao();
             }
             catch (Exception ex)
@@ -64,7 +64,8 @@ namespace CrudVenda.Dao
         }
         public static void Insert(Venda venda)
         {
-            const string sql = "INSERT INTO venda (data_venda, hora, valor_total, desconto, tipo, total_parcelas , fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @tipo,, @totalParcelas, @clienteId)";
+            const string sql = "INSERT INTO venda (data_venda, hora, valor_total, desconto, tipo, total_parcelas , fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @tipo, @totalParcelas, @clienteId); select last_insert_id();";
+
 
             try
             {
@@ -80,7 +81,22 @@ namespace CrudVenda.Dao
                 command.Parameters.AddWithValue("@tipo", venda.Tipo);
                 command.Parameters.AddWithValue("@totalParcelas", venda.TotalParcelas);
                 command.Parameters.AddWithValue("@clienteId", venda.Cliente?.Id);
-                command.ExecuteNonQuery();
+
+
+                var idVendaInserida = (ulong)command.ExecuteScalar();
+
+                if (idVendaInserida != 0 && venda.Recebimentos is not null)
+                {
+                    foreach (var recebimento in venda.Recebimentos)
+                    {
+                        recebimento.Venda = new Venda()
+                        {
+                            Id = idVendaInserida
+                        };
+
+                        RecebimentoDAO.Insert(recebimento);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -108,7 +124,7 @@ namespace CrudVenda.Dao
                 {
                     var venda = new Venda
                     {
-                        Id = reader.GetInt32("id_venda"),
+                        Id = reader.GetUInt64("id_venda"),
                         DataVenda = reader.GetDateTime("data_venda"),
                         Hora = reader.GetTimeSpan("hora").ToString(),
                         ValorTotal = reader.GetDouble("valor_total"),

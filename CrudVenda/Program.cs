@@ -5,9 +5,12 @@ using CrudVenda.Dao;
 
 Console.Clear();
 
-//teste
+// //teste
 
+#region fluxo principal
+int totalParcelas = 0;
 
+var recebimentos = new List<Recebimento>();
 
 //teste
 Console.WriteLine("Realizar venda");
@@ -18,6 +21,38 @@ var desconto = Convert.ToDouble(Console.ReadLine());
 
 Console.WriteLine("Informe o tipo");
 var tipo = Console.ReadLine();
+
+Console.WriteLine("Informe A quantidade de parcelas");
+totalParcelas = int.Parse(Console.ReadLine());
+
+if (totalParcelas == 1)
+{
+    var recebimento = new Recebimento()
+    {
+        DataPagamento = DateTime.Today,
+        DataVencimento = DateTime.Today,
+        Status = "fechado",
+        Valor = valor,
+    };
+
+    recebimentos.Add(recebimento);
+}
+else
+{
+    for (int i = 0; i < totalParcelas; i++)
+    {
+        var recebimento = new Recebimento()
+        {
+            DataPagamento = DateTime.Today,
+            DataVencimento = DateTime.Today.AddDays(30),
+            Status = "aberto",
+            Valor = valor / totalParcelas,
+        };
+
+        recebimentos.Add(recebimento);
+    }
+}
+
 
 var clientes = ClienteDAO.List();
 
@@ -43,7 +78,9 @@ var venda = new Venda
     Desconto = desconto,
     Tipo = tipo,
     DataVenda = DateTime.Now,
-    Hora = DateTime.Now.ToString("HH:mm:ss")
+    TotalParcelas = totalParcelas,
+    Hora = DateTime.Now.ToString("HH:mm:ss"),
+    Recebimentos = recebimentos
 };
 
 VendaDAO.Insert(venda);
@@ -54,7 +91,7 @@ Console.Clear();
 
 var vendas = VendaDAO.List();
 
-if (vendas is not null)
+if (vendas is not null && vendas.Count > 0)
 {
     vendas[0].RenderTitle();
 
@@ -64,6 +101,8 @@ if (vendas is not null)
     }
 }
 
+
+#endregion
 
 
 
@@ -93,3 +132,6 @@ if (vendas is not null)
 // {
 //     Console.WriteLine(item);
 // }
+
+
+
