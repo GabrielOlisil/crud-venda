@@ -62,14 +62,26 @@ namespace CrudVenda.Dao
                 throw new Exception($"Erro ao excluir o cliente {ex.Message}");
             }
         }
+
+
+
         public static void Insert(Venda venda)
         {
             const string sql = "INSERT INTO venda (data_venda, hora, valor_total, desconto, tipo, total_parcelas , fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @tipo, @totalParcelas, @clienteId); select last_insert_id();";
 
 
+
+            MySqlTransaction? transaction = null;
+
             try
             {
-                MySqlCommand command = new(sql, Conexao.Connect());
+                var conn = Conexao.Connect();
+
+                using var command = new MySqlCommand(sql, conn);
+
+                transaction = conn.BeginTransaction();
+
+                command.Transaction = transaction;
 
                 string? dataVenda = venda.DataVenda?.ToString("yyyy-MM-dd");
 
@@ -94,12 +106,19 @@ namespace CrudVenda.Dao
                             Id = idVendaInserida
                         };
 
-                        RecebimentoDAO.Insert(recebimento);
+                        if (!RecebimentoDAO.Insert(recebimento, conn))
+                        {
+                            command.Transaction.Rollback();
+                            return;
+                        }
                     }
                 }
+                command.Transaction.Commit();
+
             }
             catch (Exception ex)
             {
+                transaction?.Rollback();
                 Console.WriteLine(ex.Message);
             }
             finally
@@ -107,6 +126,9 @@ namespace CrudVenda.Dao
                 Conexao.FecharConexao();
             }
         }
+
+
+
 
         public static List<Venda> List()
         {

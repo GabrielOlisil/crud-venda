@@ -7,7 +7,7 @@ namespace CrudVenda.Dao;
 
 public class RecebimentoDAO
 {
-    public static void Insert(Recebimento recebimento)
+    public static bool Insert(Recebimento recebimento, MySqlConnection connection)
     {
 
         const string sql = "INSERT INTO recebimento (valor, data_vencimento, data_pagamento, status_recebimento, fk_caixa, fk_venda) values (@valor, @dataVencimento, @dataPagamento, @statusDespesa, @fkCaixa, @fkVenda)";
@@ -15,7 +15,7 @@ public class RecebimentoDAO
         try
         {
 
-            MySqlCommand command = new(sql, Conexao.Connect());
+            using MySqlCommand command = new(sql, connection);
 
             command.Parameters.AddWithValue("@valor", recebimento.Valor);
             command.Parameters.AddWithValue("@dataVencimento", recebimento.DataVencimento?.ToString("yyyy-MM-dd"));
@@ -23,15 +23,21 @@ public class RecebimentoDAO
             command.Parameters.AddWithValue("@statusDespesa", recebimento.Status);
             command.Parameters.AddWithValue("@fkCaixa", 1);
             command.Parameters.AddWithValue("@fkVenda", recebimento.Venda?.Id);
-            command.ExecuteNonQuery();
+
+            if (command.ExecuteNonQuery() > 0)
+            {
+                return true;
+            }
+
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
-        finally
-        {
-            Conexao.FecharConexao();
-        }
+
+
+
+        return false;
+
     }
 }
