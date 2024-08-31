@@ -50,16 +50,16 @@ namespace CrudVenda.Dao
         {
             try
             {
-                string sql = "DELETE FROM cliente WHERE id_cliente = @idcliente ";
+                string sql = "DELETE FROM venda WHERE id_venda = @idvenda ";
                 MySqlCommand comando = new MySqlCommand(sql, Conexao.Connect());
-                comando.Parameters.AddWithValue("@idcliente", venda.Cliente?.Id);
+                comando.Parameters.AddWithValue("@idvenda", venda.Id);
                 comando.ExecuteNonQuery();
                 Console.WriteLine("Cliente exclu�do com sucesso!");
                 Conexao.FecharConexao();
             }
             catch (Exception ex)
             {
-                throw new Exception($"Erro ao excluir o cliente {ex.Message}");
+                throw new Exception($"Erro ao excluir a venda {ex.Message}");
             }
         }
 
@@ -133,9 +133,7 @@ namespace CrudVenda.Dao
         public static List<Venda> List()
         {
             const string query = "select * from venda v left join cliente c on c.id_cliente = v.fk_cliente";
-
             var list = new List<Venda>();
-
             try
             {
                 var command = new MySqlCommand(query, Conexao.Connect());
@@ -166,8 +164,6 @@ namespace CrudVenda.Dao
 
                     list.Add(venda);
                 }
-
-
             }
             catch (Exception ex)
             {
