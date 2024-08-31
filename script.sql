@@ -80,7 +80,7 @@ CREATE TABLE recebimento (
     data_pagamento DATE,
     status_recebimento VARCHAR(55),
     fk_caixa INT,
-    fk_venda INT,
+    fk_venda INT ON DELETE CASCADE,
     FOREIGN KEY (fk_venda) REFERENCES venda(id_venda),
     FOREIGN KEY (fk_caixa) REFERENCES caixa(id_caixa)
 );
