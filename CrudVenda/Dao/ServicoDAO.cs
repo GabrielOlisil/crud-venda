@@ -7,6 +7,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CrudVenda.Helpers;
 
 namespace CrudVenda.Dao
 {
@@ -59,9 +60,9 @@ namespace CrudVenda.Dao
                     {
                         var servico = new Servico();
 
-                        servico.Descricao = reader.GetString("descricao");
-                        servico.Tempo = reader.GetString("Tempo");
-                        servico.Valor = reader.GetDouble("valor");
+                        servico.Descricao = reader.GetNullableString("descricao");
+                        servico.Tempo = reader.GetNullableString("Tempo");
+                        servico.Valor = reader.GetNullableDouble("valor");
                         list.Add(servico);
                     }
 

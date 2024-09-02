@@ -26,16 +26,16 @@ public class Venda : IMenuItem
 
     public void RenderTitle()
     {
-        Console.WriteLine($"{PadHelper.ShortPad("ID")} | {PadHelper.ShortPad("Data")} | {PadHelper.ShortPad("Valor Total")} | {PadHelper.ShortPad("Desconto")} | {PadHelper.ShortPad("Valor Final")} | {PadHelper.ShortPad("Hora")} | {PadHelper.ShortPad("Tipo")} | {PadHelper.MediumPad("Cliente")} ");
+        Console.WriteLine($"{PadHelper.NumberPad("ID")} | {PadHelper.ShortPad("Data")} | {PadHelper.ShortPad("Valor Total")} | {PadHelper.NumberPad("Desconto")} | {PadHelper.ShortPad("Valor Final")} | {PadHelper.ShortPad("Hora")} | {PadHelper.ShortPad("Tipo")} | {PadHelper.NumberPad("Parcelas")} | {PadHelper.MediumPad("Cliente")} ");
 
 
-        Console.WriteLine($"{PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.MediumPad("", '_')}");
+        Console.WriteLine($"{PadHelper.NumberPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.NumberPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.ShortPad("", '_')} | {PadHelper.NumberPad("", '_')} | {PadHelper.MediumPad("", '_')}");
 
     }
 
     public override string ToString()
     {
-        return $"{PadHelper.ShortPad(Id?.ToString() ?? "")} | {PadHelper.ShortPad(DataVenda?.ToString("yyyy/MM/dd") ?? "")} | {PadHelper.ShortPad(ValorTotal.ToString() ?? "")} | {PadHelper.ShortPad(Desconto.ToString() ?? "")} | {PadHelper.ShortPad(ValorFinal.ToString() ?? "")} | {PadHelper.ShortPad(Hora ?? "")} | {PadHelper.ShortPad(Tipo ?? "")} | {PadHelper.MediumPad(Cliente?.Nome ?? "")} ";
+        return $"{PadHelper.NumberPad(Id?.ToString() ?? "")} | {PadHelper.ShortPad(DataVenda?.ToString("yyyy/MM/dd") ?? "")} | {PadHelper.ShortPad(ValorTotal.ToString() ?? "")} | {PadHelper.NumberPad(Desconto.ToString() ?? "")} | {PadHelper.ShortPad(ValorFinal.ToString() ?? "")} | {PadHelper.ShortPad(Hora ?? "")} | {PadHelper.ShortPad(Tipo ?? "")} | {PadHelper.NumberPad(TotalParcelas.ToString() ?? "")} | {PadHelper.MediumPad(Cliente?.Nome ?? "")} ";
 
     }
 }

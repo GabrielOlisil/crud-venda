@@ -13,13 +13,13 @@ class MenuItem : IMenuItem
 
     public override string ToString()
     {
-        return $"{PadHelper.ShortPad(Id.ToString() ?? "")} | {PadHelper.MediumPad(Name ?? "")} ";
+        return $"{PadHelper.NumberPad(Id.ToString() ?? "")} | {PadHelper.MediumPad(Name ?? "")} ";
     }
 
     public void RenderTitle()
     {
-        Console.WriteLine(PadHelper.ShortPad("Numero") + " | " + PadHelper.MediumPad("Opção"));
-        Console.WriteLine(PadHelper.ShortPad("", '_') + " | " + PadHelper.MediumPad("", '_'));
+        Console.WriteLine(PadHelper.NumberPad("Numero") + " | " + PadHelper.MediumPad("Opção"));
+        Console.WriteLine(PadHelper.NumberPad("", '_') + " | " + PadHelper.MediumPad("", '_'));
     }
 
 }

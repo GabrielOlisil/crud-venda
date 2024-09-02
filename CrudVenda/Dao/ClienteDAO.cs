@@ -1,7 +1,7 @@
 using System;
 using CrudVenda.Conection;
 using CrudVenda.Entities;
-using CrudVenda.Helpers.DataHelperExtensions;
+using CrudVenda.Helpers;
 using MySql.Data.MySqlClient;
 
 namespace CrudVenda.Dao;

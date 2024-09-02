@@ -34,6 +34,10 @@ while (true)
             Id = 4,
             Name = "Deletar Venda"
         },
+        new(){
+            Id = 5,
+            Name = "Sair"
+        },
     };
 
     var menuInicio = new Menu(itensMenuInicio, "Selecione uma Opção");
@@ -52,7 +56,8 @@ while (true)
         { 1, Inserir},
         { 2, Listar },
         { 3, Atualizar},
-        { 4, Deletar }
+        { 4, Deletar },
+        {5, () => Environment.Exit(0)}
     };
 
 
@@ -68,6 +73,12 @@ while (true)
 
 static void Inserir()
 {
+    Console.Clear();
+
+    Console.WriteLine("==============");
+    Console.WriteLine("Realizar Venda");
+    Console.WriteLine("==============");
+
     int totalParcelas = 0;
 
     var recebimentos = new List<Recebimento>();
@@ -158,6 +169,12 @@ static void Inserir()
 
 static void Listar()
 {
+    Console.Clear();
+
+    Console.WriteLine("============");
+    Console.WriteLine("listar Venda");
+    Console.WriteLine("============");
+
     var vendas = VendaDAO.List();
 
     if (vendas is not null && vendas.Count > 0)
@@ -173,6 +190,13 @@ static void Listar()
 
 static void Atualizar()
 {
+
+    Console.Clear();
+
+    Console.WriteLine("===============");
+    Console.WriteLine("Atualizar Venda");
+    Console.WriteLine("===============");
+
     var vendas = VendaDAO.List();
 
     var menuVendas = new Menu(vendas.ToArray(), "Selecione a venda que deseja Atualizar");
@@ -209,6 +233,7 @@ static void Atualizar()
         cliente = menu.GetOption() as Cliente;
     }
 
+    var totalPOarcelas = option.TotalParcelas;
     Console.WriteLine("Informe A quantidade de parcelas");
     var totalParcelas = int.Parse(Console.ReadLine());
 
@@ -228,6 +253,13 @@ static void Atualizar()
 
 static void Deletar()
 {
+
+    Console.Clear();
+
+    Console.WriteLine("=============");
+    Console.WriteLine("Deletar Venda");
+    Console.WriteLine("=============");
+
     var vendas = VendaDAO.List();
 
     var menuVendas = new Menu(vendas.ToArray(), "Selecione a venda que deseja Deletar");

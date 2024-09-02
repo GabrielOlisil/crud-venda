@@ -8,7 +8,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CrudVenda.Helpers.DataHelperExtensions;
+using CrudVenda.Helpers;
 
 namespace CrudVenda.Dao
 {
@@ -24,8 +24,14 @@ namespace CrudVenda.Dao
                 command.Parameters.AddWithValue("@dataVenda", venda.DataVenda);
                 command.Parameters.AddWithValue("@valorTotal", venda.ValorTotal);
                 command.Parameters.AddWithValue("@idVenda", venda.Id);
+                command.Parameters.AddWithValue("@hora", venda.Hora);
+                command.Parameters.AddWithValue("@totalParcelas", venda.TotalParcelas);
+                command.Parameters.AddWithValue("@desconto", venda.Desconto);
+                command.Parameters.AddWithValue("@valorFinal", venda.ValorFinal);
+                command.Parameters.AddWithValue("@tipo", venda.Tipo);
 
                 int affectedRows = command.ExecuteNonQuery();
+
                 if (affectedRows > 0)
                 {
                     Console.WriteLine("Venda atualizada com sucesso.");

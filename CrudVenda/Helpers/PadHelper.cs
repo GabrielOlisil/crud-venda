@@ -25,4 +25,15 @@ public static class PadHelper
     {
         return (value.Length > 13 ? value[..10] + "..." : value).PadRight(13, character);
     }
+
+
+    public static string NumberPad(string value)
+    {
+        return (value.Length > 6 ? value[..3] + "..." : value).PadRight(6);
+    }
+
+    public static string NumberPad(string value, char character)
+    {
+        return (value.Length > 6 ? value[..3] + "..." : value).PadRight(6, character);
+    }
 }

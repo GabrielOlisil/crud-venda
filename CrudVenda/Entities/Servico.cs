@@ -12,12 +12,12 @@ namespace CrudVenda.Entities
     {
         public bool IsMarked { get; set; } = false;
 
-        public int Numero { get; set; }
-        public double Valor { get; set; }
+        public int? Numero { get; set; }
+        public double? Valor { get; set; }
 
-        public string Descricao { get; set; }
+        public string? Descricao { get; set; }
 
-        public string Tempo { get; set; }
+        public string? Tempo { get; set; }
 
         public void RenderTitle()
         {
