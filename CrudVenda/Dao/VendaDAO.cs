@@ -8,6 +8,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CrudVenda.Helpers.DataHelperExtensions;
 
 namespace CrudVenda.Dao
 {
@@ -15,12 +16,11 @@ namespace CrudVenda.Dao
     {
         public static void Update(Venda venda)
         {
-            const string query = "UPDATE venda SET data_venda = @dataVenda, valor_total = @valorTotal WHERE id_venda = @idVenda";
+            const string query = "UPDATE venda SET data_venda = @dataVenda, valor_total = @valorTotal, hora = @hora, total_parcelas = @totalParcelas, desconto = @desconto, valor_final = @valorFinal, tipo = @tipo  WHERE id_venda = @idVenda";
 
             try
             {
                 using var command = new MySqlCommand(query, Conexao.Connect());
-                command.Parameters.AddWithValue("@idCliente", venda.Id);
                 command.Parameters.AddWithValue("@dataVenda", venda.DataVenda);
                 command.Parameters.AddWithValue("@valorTotal", venda.ValorTotal);
                 command.Parameters.AddWithValue("@idVenda", venda.Id);
@@ -50,15 +50,18 @@ namespace CrudVenda.Dao
             try
             {
                 string sql = "DELETE FROM venda WHERE id_venda = @idvenda ";
-                MySqlCommand comando = new MySqlCommand(sql, Conexao.Connect());
+                using MySqlCommand comando = new MySqlCommand(sql, Conexao.Connect());
                 comando.Parameters.AddWithValue("@idvenda", venda.Id);
                 comando.ExecuteNonQuery();
-                Console.WriteLine("Cliente excluído com sucesso!");
-                Conexao.FecharConexao();
+                Console.WriteLine("Venda excluída com sucesso!");
             }
             catch (Exception ex)
             {
                 throw new Exception($"Erro ao excluir a venda {ex.Message}");
+            }
+            finally
+            {
+                Conexao.FecharConexao();
             }
         }
 
@@ -66,7 +69,7 @@ namespace CrudVenda.Dao
 
         public static void Insert(Venda venda)
         {
-            const string sql = "INSERT INTO venda (data_venda, hora, valor_total, desconto, tipo, total_parcelas , fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @tipo, @totalParcelas, @clienteId); select last_insert_id();";
+            const string sql = "INSERT INTO venda (data_venda, hora, valor_total, desconto, valor_final, tipo, total_parcelas , fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @valorFinal , @tipo, @totalParcelas, @clienteId); select last_insert_id();";
 
 
 
@@ -89,6 +92,7 @@ namespace CrudVenda.Dao
                 command.Parameters.AddWithValue("@hora", venda.Hora);
                 command.Parameters.AddWithValue("@valorTotal", venda.ValorTotal);
                 command.Parameters.AddWithValue("@desconto", venda.Desconto);
+                command.Parameters.AddWithValue("@valorFinal", venda.ValorFinal);
                 command.Parameters.AddWithValue("@tipo", venda.Tipo);
                 command.Parameters.AddWithValue("@totalParcelas", venda.TotalParcelas);
                 command.Parameters.AddWithValue("@clienteId", venda.Cliente?.Id);
@@ -143,30 +147,35 @@ namespace CrudVenda.Dao
                 {
                     var venda = new Venda
                     {
-                        Id = reader.GetUInt64("id_venda"),
-                        DataVenda = reader.GetDateTime("data_venda"),
-                        Hora = reader.GetTimeSpan("hora").ToString(),
-                        ValorTotal = reader.GetDouble("valor_total"),
-                        Desconto = reader.GetDouble("desconto"),
-                        Tipo = reader.GetString("tipo"),
-                        TotalParcelas = reader.GetInt32("total_parcelas"),
+                        Id = reader.GetNullableUInt64("id_venda"),
+                        DataVenda = reader.GetNullableDateTime("data_venda"),
+                        Hora = reader.GetNullableTimeSpan("hora").ToString(),
+                        ValorTotal = reader.GetNullableDouble("valor_total"),
+                        ValorFinal = reader.GetNullableDouble("valor_final"),
+                        Desconto = reader.GetNullableDouble("desconto"),
+                        Tipo = reader.GetNullableString("tipo"),
+                        TotalParcelas = reader.GetNullableInt32("total_parcelas"),
+
                         Cliente = new Cliente
                         {
-                            Id = reader.GetInt32("id_cliente"),
-                            Nome = reader.GetString("nome"),
-                            Cpf = reader.GetString("cpf"),
-                            Email = reader.GetString("email"),
-                            DataNascimento = reader.GetDateTime("data_nascimento"),
-                            Telefone = reader.GetString("telefone"),
+                            Id = reader.GetNullableUInt64("id_cliente"),
+                            Nome = reader.GetNullableString("nome"),
+                            Cpf = reader.GetNullableString("cpf"),
+                            Email = reader.GetNullableString("email"),
+                            DataNascimento = reader.GetNullableDateTime("data_nascimento"),
+                            Telefone = reader.GetNullableString("telefone")
                         }
                     };
+
+
+
 
                     list.Add(venda);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Erro: " + ex.Message + Environment.NewLine + ex.StackTrace);
             }
             finally
             {

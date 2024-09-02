@@ -1,27 +1,10 @@
 ﻿using CrudVenda.Menu;
 using CrudVenda.Entities;
 using CrudVenda.Dao;
+using System.ComponentModel.Design;
 
 
 
-
-Cliente cliente1 = new Cliente() { Id = 1 };
-
-Venda primeiraVenda = new Venda()
-{
-    Id = 1,
-    DataVenda = DateTime.Today,
-    TotalParcelas = 2,
-    Desconto = 3.40f,
-    ValorTotal = 310,
-    Hora = DateTime.Now.ToString("HH:mm:ss"),
-    Tipo = "Débito",
-    Cliente = cliente1
-
-
-};
-
-VendaDAO.Delete(primeiraVenda);
 
 
 Console.Clear();
@@ -96,38 +79,47 @@ static void Inserir()
     Console.WriteLine("Insira o desconto");
     var desconto = Convert.ToDouble(Console.ReadLine());
 
+    var valorFinal = valor - valor * (desconto / 100);
+
     Console.WriteLine("Informe o tipo");
     var tipo = Console.ReadLine();
 
-    Console.WriteLine("Informe A quantidade de parcelas");
-    totalParcelas = int.Parse(Console.ReadLine());
 
-    if (totalParcelas == 1)
-    {
-        var recebimento = new Recebimento()
-        {
-            DataPagamento = DateTime.Today,
-            DataVencimento = DateTime.Today,
-            Status = "fechado",
-            Valor = valor,
-        };
+    System.Console.WriteLine("A venda será a vista {1} ou a prazo? {2}");
+    var prazo = int.Parse(Console.ReadLine());
 
-        recebimentos.Add(recebimento);
-    }
-    else
+    var status = prazo == 1 ? "fechado" : "aberto";
+
+
+
+    if (prazo != 1)
     {
+        Console.WriteLine("Informe A quantidade de parcelas");
+        totalParcelas = int.Parse(Console.ReadLine());
         for (int i = 0; i < totalParcelas; i++)
         {
             var recebimento = new Recebimento()
             {
                 DataPagamento = DateTime.Today,
                 DataVencimento = DateTime.Today.AddDays(30),
-                Status = "aberto",
+                Status = status,
                 Valor = valor / totalParcelas,
             };
 
             recebimentos.Add(recebimento);
         }
+    }
+    else
+    {
+        var recebimento = new Recebimento()
+        {
+            DataPagamento = DateTime.Today,
+            DataVencimento = DateTime.Today,
+            Status = status,
+            Valor = valor,
+        };
+
+        recebimentos.Add(recebimento);
     }
 
 
@@ -153,16 +145,15 @@ static void Inserir()
         Cliente = cliente,
         ValorTotal = valor,
         Desconto = desconto,
+        ValorFinal = valorFinal,
         Tipo = tipo,
-        DataVenda = DateTime.Now,
+        DataVenda = DateTime.Today,
         TotalParcelas = totalParcelas,
         Hora = DateTime.Now.ToString("HH:mm:ss"),
         Recebimentos = recebimentos
     };
 
     VendaDAO.Insert(venda);
-
-    Console.ReadKey();
 }
 
 static void Listar()
@@ -182,135 +173,72 @@ static void Listar()
 
 static void Atualizar()
 {
+    var vendas = VendaDAO.List();
+
+    var menuVendas = new Menu(vendas.ToArray(), "Selecione a venda que deseja Atualizar");
+
+    var option = menuVendas.GetOption() as Venda;
+
+    if (option is null)
+    {
+        Console.WriteLine("A venda não pode ser encontrada");
+        return;
+    }
+
+    Console.WriteLine("Insira o valor da venda");
+    var valor = Convert.ToDouble(Console.ReadLine());
+    Console.WriteLine("Insira o desconto");
+    var desconto = Convert.ToDouble(Console.ReadLine());
+
+    var valorFinal = valor - valor * (desconto / 100);
+
+    Console.WriteLine("Informe o tipo");
+    var tipo = Console.ReadLine();
+
+    var clientes = ClienteDAO.List();
+
+    Console.WriteLine("Deseja incluir o cliente??");
+
+    var optionCli = Console.ReadLine();
+
+    Cliente? cliente = null;
+
+    if (optionCli != "n")
+    {
+        var menu = new Menu(clientes.ToArray(), "Selecione o Cliente");
+        cliente = menu.GetOption() as Cliente;
+    }
+
+    Console.WriteLine("Informe A quantidade de parcelas");
+    var totalParcelas = int.Parse(Console.ReadLine());
+
+    option.Cliente = cliente;
+    option.DataVenda = DateTime.Today;
+    option.Hora = DateTime.Now.ToString("HH:mm:ss");
+    option.Desconto = desconto;
+    option.Tipo = tipo;
+    option.ValorTotal = valor;
+    option.ValorFinal = valorFinal;
+    option.TotalParcelas = totalParcelas;
+
+    VendaDAO.Update(option);
+
 
 }
 
 static void Deletar()
 {
+    var vendas = VendaDAO.List();
 
-}
+    var menuVendas = new Menu(vendas.ToArray(), "Selecione a venda que deseja Deletar");
 
+    var option = menuVendas.GetOption() as Venda;
 
-
-
-
-
-
-#region fluxo principal
-int totalParcelas = 0;
-
-var recebimentos = new List<Recebimento>();
-
-//teste
-Console.WriteLine("Realizar venda");
-Console.WriteLine("Insira o valor da venda");
-var valor = Convert.ToDouble(Console.ReadLine());
-Console.WriteLine("Insira o desconto");
-var desconto = Convert.ToDouble(Console.ReadLine());
-
-Console.WriteLine("Informe o tipo");
-var tipo = Console.ReadLine();
-
-Console.WriteLine("Informe A quantidade de parcelas");
-totalParcelas = int.Parse(Console.ReadLine());
-
-if (totalParcelas == 1)
-{
-    var recebimento = new Recebimento()
+    if (option is not null)
     {
-        DataPagamento = DateTime.Today,
-        DataVencimento = DateTime.Today,
-        Status = "fechado",
-        Valor = valor,
-    };
-
-    recebimentos.Add(recebimento);
-}
-else
-{
-    for (int i = 0; i < totalParcelas; i++)
-    {
-        var recebimento = new Recebimento()
-        {
-            DataPagamento = DateTime.Today,
-            DataVencimento = DateTime.Today.AddDays(30),
-            Status = "aberto",
-            Valor = valor / totalParcelas,
-        };
-
-        recebimentos.Add(recebimento);
+        VendaDAO.Delete(option);
     }
+
+
 }
-
-
-var clientes = ClienteDAO.List();
-
-Console.WriteLine("Deseja incluir o cliente??");
-
-var optionCli = Console.ReadLine();
-
-Cliente? cliente = null;
-
-if (optionCli != "n")
-{
-    var menu = new Menu(clientes.ToArray(), "Selecione o Cliente");
-    cliente = menu.GetOption() as Cliente;
-}
-
-
-
-
-var venda = new Venda
-{
-    Cliente = cliente,
-    ValorTotal = valor,
-    Desconto = desconto,
-    Tipo = tipo,
-    DataVenda = DateTime.Now,
-    TotalParcelas = totalParcelas,
-    Hora = DateTime.Now.ToString("HH:mm:ss"),
-    Recebimentos = recebimentos
-};
-
-VendaDAO.Insert(venda);
-
-Console.ReadKey();
-
-Console.Clear();
-
-
-
-
-#endregion
-
-
-
-// var cliente = ClienteDAO.Read(1);
-
-
-// var venda = new Venda
-// {
-//     DataVenda = new DateTime(2024, 12, 13),
-//     Hora = "12:00",
-//     ValorTotal = 200,
-//     Desconto = 0,
-//     Tipo = "Sei la po",
-//     Cliente = cliente
-// };
-
-// VendaDAO.Insert(venda);
-
-
-
-// var list = VendaDAO.List();
-
-
-// list[0].RenderTitle();
-
-// foreach (var item in list)
-// {
-//     Console.WriteLine(item);
-// }
-
-
 

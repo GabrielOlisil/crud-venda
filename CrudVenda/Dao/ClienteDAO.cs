@@ -1,6 +1,7 @@
 using System;
 using CrudVenda.Conection;
 using CrudVenda.Entities;
+using CrudVenda.Helpers.DataHelperExtensions;
 using MySql.Data.MySqlClient;
 
 namespace CrudVenda.Dao;
@@ -22,12 +23,12 @@ public class ClienteDAO
             {
                 var cliente = new Cliente
                 {
-                    Id = reader.GetInt32("id_cliente"),
-                    Nome = reader.GetString("nome"),
-                    Cpf = reader.GetString("cpf"),
-                    Email = reader.GetString("email"),
-                    DataNascimento = reader.GetDateTime("data_nascimento"),
-                    Telefone = reader.GetString("telefone"),
+                    Id = reader.GetNullableUInt64("id_cliente"),
+                    Nome = reader.GetNullableString("nome"),
+                    Cpf = reader.GetNullableString("cpf"),
+                    Email = reader.GetNullableString("email"),
+                    DataNascimento = reader.GetNullableDateTime("data_nascimento"),
+                    Telefone = reader.GetNullableString("telefone"),
                 };
 
                 list.Add(cliente);
@@ -61,12 +62,12 @@ public class ClienteDAO
 
             var cliente = new Cliente
             {
-                Id = reader.GetInt32("id_cliente"),
-                Nome = reader.GetString("nome"),
-                Cpf = reader.GetString("cpf"),
-                Email = reader.GetString("email"),
-                DataNascimento = reader.GetDateTime("data_nascimento"),
-                Telefone = reader.GetString("telefone"),
+                Id = reader.GetNullableUInt64("id_cliente"),
+                Nome = reader.GetNullableString("nome"),
+                Cpf = reader.GetNullableString("cpf"),
+                Email = reader.GetNullableString("email"),
+                DataNascimento = reader.GetNullableDateTime("data_nascimento"),
+                Telefone = reader.GetNullableString("telefone"),
             };
 
             return cliente;

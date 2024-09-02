@@ -58,6 +58,7 @@ CREATE TABLE venda (
     valor_total DOUBLE,
     total_parcelas int,
     desconto DOUBLE,
+    valor_final DOUBLE,
     tipo VARCHAR(200),
     fk_cliente INT,
     FOREIGN KEY (fk_cliente) REFERENCES cliente(id_cliente)
@@ -80,8 +81,8 @@ CREATE TABLE recebimento (
     data_pagamento DATE,
     status_recebimento VARCHAR(55),
     fk_caixa INT,
-    fk_venda INT ON DELETE CASCADE,
-    FOREIGN KEY (fk_venda) REFERENCES venda(id_venda),
+    fk_venda INT,
+    FOREIGN KEY (fk_venda) REFERENCES venda(id_venda) ON DELETE CASCADE,
     FOREIGN KEY (fk_caixa) REFERENCES caixa(id_caixa)
 );
 
