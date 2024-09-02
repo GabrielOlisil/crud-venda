@@ -15,13 +15,12 @@ namespace CrudVenda.Dao
     {
         public static void Update(Venda venda)
         {
-            const string query = "UPDATE venda SET id_servico = @idServico, data_venda = @dataVenda, valor_total = @valorTotal WHERE id_venda = @idVenda";
+            const string query = "UPDATE venda SET data_venda = @dataVenda, valor_total = @valorTotal WHERE id_venda = @idVenda";
 
             try
             {
                 using var command = new MySqlCommand(query, Conexao.Connect());
                 command.Parameters.AddWithValue("@idCliente", venda.Id);
-                command.Parameters.AddWithValue("@idServico", venda.Cliente?.Id);
                 command.Parameters.AddWithValue("@dataVenda", venda.DataVenda);
                 command.Parameters.AddWithValue("@valorTotal", venda.ValorTotal);
                 command.Parameters.AddWithValue("@idVenda", venda.Id);
@@ -50,16 +49,16 @@ namespace CrudVenda.Dao
         {
             try
             {
-                string sql = "DELETE FROM cliente WHERE id_cliente = @idcliente ";
+                string sql = "DELETE FROM venda WHERE id_venda = @idvenda ";
                 MySqlCommand comando = new MySqlCommand(sql, Conexao.Connect());
-                comando.Parameters.AddWithValue("@idcliente", venda.Cliente?.Id);
+                comando.Parameters.AddWithValue("@idvenda", venda.Id);
                 comando.ExecuteNonQuery();
                 Console.WriteLine("Cliente excluído com sucesso!");
                 Conexao.FecharConexao();
             }
             catch (Exception ex)
             {
-                throw new Exception($"Erro ao excluir o cliente {ex.Message}");
+                throw new Exception($"Erro ao excluir a venda {ex.Message}");
             }
         }
 
@@ -133,9 +132,7 @@ namespace CrudVenda.Dao
         public static List<Venda> List()
         {
             const string query = "select * from venda v left join cliente c on c.id_cliente = v.fk_cliente";
-
             var list = new List<Venda>();
-
             try
             {
                 var command = new MySqlCommand(query, Conexao.Connect());
@@ -166,8 +163,6 @@ namespace CrudVenda.Dao
 
                     list.Add(venda);
                 }
-
-
             }
             catch (Exception ex)
             {
