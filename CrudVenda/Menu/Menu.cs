@@ -1,4 +1,4 @@
-﻿namespace CrudVenda.Control;
+﻿namespace CrudVenda.Menu;
 
 class Menu
 {

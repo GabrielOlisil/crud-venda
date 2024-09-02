@@ -54,7 +54,7 @@ namespace CrudVenda.Dao
                 MySqlCommand comando = new MySqlCommand(sql, Conexao.Connect());
                 comando.Parameters.AddWithValue("@idcliente", venda.Cliente?.Id);
                 comando.ExecuteNonQuery();
-                Console.WriteLine("Cliente exclu�do com sucesso!");
+                Console.WriteLine("Cliente excluído com sucesso!");
                 Conexao.FecharConexao();
             }
             catch (Exception ex)

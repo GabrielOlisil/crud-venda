@@ -1,5 +1,5 @@
 using System;
-using CrudVenda.Control;
+using CrudVenda.Menu;
 using CrudVenda.Helpers;
 
 namespace CrudVenda.Entities;

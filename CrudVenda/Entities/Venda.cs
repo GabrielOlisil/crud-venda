@@ -1,5 +1,5 @@
 using System;
-using CrudVenda.Control;
+using CrudVenda.Menu;
 using CrudVenda.Helpers;
 
 namespace CrudVenda.Entities;
@@ -34,7 +34,7 @@ public class Venda : IMenuItem
 
     public override string ToString()
     {
-        return $"{PadHelper.ShortPad(Id.ToString())} | {PadHelper.ShortPad(DataVenda?.ToString("yyyy/MM/dd") ?? "")} | {PadHelper.ShortPad(Desconto.ToString() ?? "")} | {PadHelper.ShortPad(ValorTotal.ToString() ?? "")} | {PadHelper.ShortPad(Hora ?? "")} | {PadHelper.ShortPad(Tipo ?? "")} | {PadHelper.MediumPad(Cliente?.Nome ?? "")} ";
+        return $"{PadHelper.ShortPad(Id?.ToString() ?? "")} | {PadHelper.ShortPad(DataVenda?.ToString("yyyy/MM/dd") ?? "")} | {PadHelper.ShortPad(Desconto.ToString() ?? "")} | {PadHelper.ShortPad(ValorTotal.ToString() ?? "")} | {PadHelper.ShortPad(Hora ?? "")} | {PadHelper.ShortPad(Tipo ?? "")} | {PadHelper.MediumPad(Cliente?.Nome ?? "")} ";
 
     }
 }

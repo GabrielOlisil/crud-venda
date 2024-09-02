@@ -1,6 +1,6 @@
 using System;
 
-namespace CrudVenda.Control;
+namespace CrudVenda.Menu;
 
 public interface IMenuItem
 {
