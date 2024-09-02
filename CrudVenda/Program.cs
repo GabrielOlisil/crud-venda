@@ -3,7 +3,32 @@ using CrudVenda.Entities;
 using CrudVenda.Conection;
 using CrudVenda.Dao;
 
+
+
+
+Cliente cliente1 = new Cliente() { Id = 1 };
+
+Venda primeiraVenda = new Venda()
+{
+    Id = 1,
+    DataVenda = DateTime.Today,
+    TotalParcelas = 2,
+    Desconto = 3.40f,
+    ValorTotal = 310,
+    Hora = DateTime.Now.ToString("HH:mm:ss"),
+    Tipo = "Débito",
+    Cliente = cliente1
+
+
+};
+
+VendaDAO.Delete(primeiraVenda);
+
+
 Console.Clear();
+
+
+
 
 // //teste
 
