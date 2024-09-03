@@ -37,22 +37,10 @@ namespace CrudVenda.Dao
 
                 int affectedRows = command.ExecuteNonQuery();
 
-<<<<<<< HEAD
                 if (affectedRows <= 0)
                 {
                     throw new InvalidOperationException("Não foi possível atualizar o registro");
                 }
-=======
-                if (affectedRows < 0)
-                {
-                    throw new InvalidOperationException("Nenhuma venda encontrada com o ID fornecido.");
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erro ao atualizar venda: " + ex.Message);
->>>>>>> refs/remotes/origin/main
             }
             finally
             {
@@ -196,13 +184,6 @@ namespace CrudVenda.Dao
                     list.Add(venda);
                 }
             }
-<<<<<<< HEAD
-=======
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Erro: não foi possível listar os dados requeridos" + ex.StackTrace);
-            }
->>>>>>> refs/remotes/origin/main
             finally
             {
                 Conexao.FecharConexao();
