@@ -32,14 +32,11 @@ namespace CrudVenda.Dao
 
                 int affectedRows = command.ExecuteNonQuery();
 
-                if (affectedRows > 0)
+                if (affectedRows < 0)
                 {
-                    Console.WriteLine("Venda atualizada com sucesso.");
+                    throw new InvalidOperationException("Nenhuma venda encontrada com o ID fornecido.");
                 }
-                else
-                {
-                    Console.WriteLine("Nenhuma venda encontrada com o ID fornecido.");
-                }
+                
             }
             catch (Exception ex)
             {
@@ -181,7 +178,7 @@ namespace CrudVenda.Dao
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro: " + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new InvalidOperationException("Erro: não foi possível listar os dados requeridos" + ex.StackTrace);
             }
             finally
             {
