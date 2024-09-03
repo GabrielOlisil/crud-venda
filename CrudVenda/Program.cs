@@ -430,7 +430,16 @@ static void Atualizar()
     option.ValorFinal = valorFinal;
     option.TotalParcelas = totalParcelas;
 
-    VendaDAO.Update(option);
+    try
+    {
+
+        VendaDAO.Update(option);
+        Console.WriteLine("Venda Atualizada com sucesso");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erro:" + ex.Message);
+    }
 
 
 }
