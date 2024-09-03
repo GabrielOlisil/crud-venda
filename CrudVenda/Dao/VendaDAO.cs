@@ -14,9 +14,14 @@ namespace CrudVenda.Dao
 {
     internal class VendaDAO
     {
+        /// <summary>
+        /// Atualiza uma venda no banco de dados
+        /// </summary>
+        /// <param name="venda"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public static void Update(Venda venda)
         {
-            const string query = "UPDATE venda SET data_venda = @dataVenda, valor_total = @valorTotal, hora = @hora, total_parcelas = @totalParcelas, desconto = @desconto, valor_final = @valorFinal, tipo = @tipo  WHERE id_venda = @idVenda";
+            const string query = "UPDATE vendas SET data_venda = @dataVenda, valor_total = @valorTotal, hora = @hora, total_parcelas = @totalParcelas, desconto = @desconto, valor_final = @valorFinal, tipo = @tipo  WHERE id_venda = @idVenda";
 
             try
             {
@@ -32,18 +37,10 @@ namespace CrudVenda.Dao
 
                 int affectedRows = command.ExecuteNonQuery();
 
-                if (affectedRows > 0)
+                if (affectedRows <= 0)
                 {
-                    Console.WriteLine("Venda atualizada com sucesso.");
+                    throw new InvalidOperationException("Não foi possível atualizar o registro");
                 }
-                else
-                {
-                    Console.WriteLine("Nenhuma venda encontrada com o ID fornecido.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erro ao atualizar venda: " + ex.Message);
             }
             finally
             {
@@ -51,19 +48,25 @@ namespace CrudVenda.Dao
             }
         }
 
+        /// <summary>
+        /// Exclui uma venda do banco de dados
+        /// </summary>
+        /// <param name="venda"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public static void Delete(Venda venda)
         {
+            const string sql = "DELETE FROM vendas WHERE id_venda = @idvenda ";
+
             try
             {
-                string sql = "DELETE FROM venda WHERE id_venda = @idvenda ";
-                using MySqlCommand comando = new MySqlCommand(sql, Conexao.Connect());
+                using var comando = new MySqlCommand(sql, Conexao.Connect());
                 comando.Parameters.AddWithValue("@idvenda", venda.Id);
-                comando.ExecuteNonQuery();
-                Console.WriteLine("Venda excluída com sucesso!");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Erro ao excluir a venda {ex.Message}");
+                var affectedRows = comando.ExecuteNonQuery();
+
+                if (affectedRows <= 0)
+                {
+                    throw new InvalidOperationException("Não foi possível excluir o registro");
+                }
             }
             finally
             {
@@ -72,10 +75,13 @@ namespace CrudVenda.Dao
         }
 
 
-
+        /// <summary>
+        /// Insere uma venda no Banco de Dados
+        /// </summary>
+        /// <param name="venda"></param>
         public static void Insert(Venda venda)
         {
-            const string sql = "INSERT INTO venda (data_venda, hora, valor_total, desconto, valor_final, tipo, total_parcelas , fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @valorFinal , @tipo, @totalParcelas, @clienteId); select last_insert_id();";
+            const string sql = "INSERT INTO vendas (data_venda, hora, valor_total, desconto, valor_final, tipo, total_parcelas , fk_cliente) values (@dataVenda, @hora, @valorTotal, @desconto, @valorFinal , @tipo, @totalParcelas, @clienteId); select last_insert_id();";
 
 
 
@@ -117,8 +123,7 @@ namespace CrudVenda.Dao
 
                         if (!RecebimentoDAO.Insert(recebimento, conn))
                         {
-                            command.Transaction.Rollback();
-                            return;
+                            throw new InvalidOperationException("Erro ao Inserir recebimento");
                         }
                     }
                 }
@@ -129,6 +134,7 @@ namespace CrudVenda.Dao
             {
                 transaction?.Rollback();
                 Console.WriteLine(ex.Message);
+                throw;
             }
             finally
             {
@@ -138,10 +144,13 @@ namespace CrudVenda.Dao
 
 
 
-
+        /// <summary>
+        /// Lista as vendas no banco de dados
+        /// </summary>
+        /// <returns></returns>
         public static List<Venda> List()
         {
-            const string query = "select * from venda v left join cliente c on c.id_cliente = v.fk_cliente";
+            const string query = "select * from vendas v left join clientes c on c.id_cliente = v.fk_cliente";
             var list = new List<Venda>();
             try
             {
@@ -172,16 +181,8 @@ namespace CrudVenda.Dao
                             Telefone = reader.GetNullableString("telefone")
                         }
                     };
-
-
-
-
                     list.Add(venda);
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erro: " + ex.Message + Environment.NewLine + ex.StackTrace);
             }
             finally
             {

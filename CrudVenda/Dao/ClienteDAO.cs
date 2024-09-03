@@ -11,13 +11,14 @@ public class ClienteDAO
     public static List<Cliente> List()
     {
         var list = new List<Cliente>();
-        const string query = "select * from cliente";
+        const string query = "select * from clientes";
         try
         {
-            var command = new MySqlCommand(query, Conexao.Connect());
+            using var command = new MySqlCommand(query, Conexao.Connect());
 
             using var reader = command.ExecuteReader();
 
+            string oi = "aa";
 
             while (reader.Read())
             {
@@ -34,10 +35,6 @@ public class ClienteDAO
                 list.Add(cliente);
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
         finally
         {
             Conexao.FecharConexao();
@@ -47,7 +44,7 @@ public class ClienteDAO
 
     public static Cliente? FindById(int id)
     {
-        const string query = $"select * from cliente where id_cliente = @id";
+        const string query = $"select * from clientes where id_cliente = @id";
 
         try
         {
@@ -57,7 +54,10 @@ public class ClienteDAO
 
             using var reader = command.ExecuteReader();
 
-            reader.Read();
+            if (!reader.Read())
+            {
+                return null;
+            }
 
 
             var cliente = new Cliente
@@ -73,17 +73,9 @@ public class ClienteDAO
             return cliente;
 
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
         finally
         {
             Conexao.FecharConexao();
         }
-
-
-
-        return null;
     }
 }

@@ -28,6 +28,7 @@ public static class Conexao
     public static void FecharConexao()
     {
         _connection?.Close();
+        _connection?.Dispose();
     }
 
 }

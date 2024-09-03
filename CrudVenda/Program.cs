@@ -2,6 +2,7 @@
 using CrudVenda.Entities;
 using CrudVenda.Dao;
 using System.ComponentModel.Design;
+using System.Text;
 
 
 
@@ -22,25 +23,30 @@ while (true)
         new ()
         {
             Id = 2,
-            Name = "Listar Vendas"
+            Name = "Inspecionar Venda"
         },
         new ()
         {
             Id = 3,
-            Name = "Atualizar Venda"
+            Name = "Listar Vendas"
         },
         new ()
         {
             Id = 4,
+            Name = "Atualizar Venda"
+        },
+        new ()
+        {
+            Id = 5,
             Name = "Deletar Venda"
         },
         new(){
-            Id = 5,
+            Id = 6,
             Name = "Sair"
         },
     };
 
-    var menuInicio = new Menu(itensMenuInicio, "Selecione uma Opção");
+    var menuInicio = new Menu(itensMenuInicio, "Navegue com as setas e selecione com enter uma opção");
 
     var opcao = menuInicio.GetOption() as MenuItem;
 
@@ -53,11 +59,12 @@ while (true)
 
     var optionActions = new Dictionary<int, Action>
     {
-        { 1, Inserir},
-        { 2, Listar },
-        { 3, Atualizar},
-        { 4, Deletar },
-        {5, () => Environment.Exit(0)}
+        { 1, Inserir },
+        { 2, Inspecionar },
+        { 3, Listar },
+        { 4, Atualizar },
+        { 5, Deletar },
+        { 6, () => Environment.Exit(0) }
     };
 
 
@@ -66,8 +73,93 @@ while (true)
         optionActions[opcao.Id]();
     }
 
+    Console.WriteLine("Pressione qualquer tecla pra continhar");
     Console.ReadKey();
 
+}
+
+
+static void Inspecionar()
+{
+
+    Console.Clear();
+
+    var title = new StringBuilder();
+
+    title.Append("=================");
+    title.Append(Environment.NewLine);
+    title.Append("Inspecionar Venda");
+    title.Append(Environment.NewLine);
+    title.Append("=================");
+    title.Append(Environment.NewLine);
+    title.Append("Selecione a Venda");
+    title.Append(Environment.NewLine);
+
+
+    List<Venda>? vendas = null;
+    try
+    {
+        vendas = VendaDAO.List();
+
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erro: " + ex.Message);
+        return;
+    }
+
+    if (vendas.Count == 0)
+    {
+        Console.WriteLine("Não Existem vendas");
+        return;
+    }
+
+    var menu = new Menu([.. vendas], title.ToString());
+
+
+    if (menu.GetOption() is not Venda venda)
+    {
+        Console.WriteLine("Houve um erro ao selecionar a venda");
+        return;
+    }
+
+    Console.Clear();
+
+    List<Recebimento>? recebimentos = null;
+
+    try
+    {
+        recebimentos = RecebimentoDAO.List(venda);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erro: " + ex.Message);
+    }
+
+
+    Console.WriteLine("Dados da Venda:" + Environment.NewLine);
+
+    Console.WriteLine($"ID: {venda.Id}");
+    Console.WriteLine($"Valor Total: {venda.ValorTotal}");
+    Console.WriteLine($"Desconto: {venda.Desconto}");
+    Console.WriteLine($"Valor Final: {venda.ValorFinal}");
+    Console.WriteLine($"Data: {venda.DataVenda?.ToShortDateString()}");
+    Console.WriteLine($"Hora: {venda.Hora}");
+    Console.WriteLine($"Total Parcelas: {venda.TotalParcelas}");
+
+
+
+    if (recebimentos is not null)
+    {
+        Console.WriteLine(Environment.NewLine + "Recebimentos");
+        recebimentos[0].RenderTitle();
+
+
+        foreach (var recebimento in recebimentos)
+        {
+            Console.WriteLine(recebimento);
+        }
+    }
 }
 
 
@@ -83,21 +175,39 @@ static void Inserir()
 
     var recebimentos = new List<Recebimento>();
 
-    //teste
     Console.WriteLine("Realizar venda");
     Console.WriteLine("Insira o valor da venda");
-    var valor = Convert.ToDouble(Console.ReadLine());
-    Console.WriteLine("Insira o desconto");
-    var desconto = Convert.ToDouble(Console.ReadLine());
+
+    if (!double.TryParse(Console.ReadLine(), out var valor))
+    {
+        Console.WriteLine("Entrada inválida, abortando...");
+        return;
+    }
+
+
+
+    Console.WriteLine("Insira a porcentagem de desconto");
+    if (!double.TryParse(Console.ReadLine(), out var desconto))
+    {
+        Console.WriteLine("Entrada inválida, abortando...");
+        return;
+    }
 
     var valorFinal = valor - valor * (desconto / 100);
 
+
     Console.WriteLine("Informe o tipo");
+
+
     var tipo = Console.ReadLine();
 
 
-    System.Console.WriteLine("A venda será a vista {1} ou a prazo? {2}");
-    var prazo = int.Parse(Console.ReadLine());
+    Console.WriteLine("A venda será a vista {1} ou a prazo? {2}");
+    if (!int.TryParse(Console.ReadLine(), out var prazo))
+    {
+        Console.WriteLine("Entrada inválida, abortando...");
+        return;
+    }
 
     var status = prazo == 1 ? "fechado" : "aberto";
 
@@ -106,7 +216,12 @@ static void Inserir()
     if (prazo != 1)
     {
         Console.WriteLine("Informe A quantidade de parcelas");
-        totalParcelas = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out totalParcelas))
+        {
+            Console.WriteLine("Entrada inválida, abortando...");
+            return;
+        }
+
         for (int i = 0; i < totalParcelas; i++)
         {
             var recebimento = new Recebimento()
@@ -134,7 +249,9 @@ static void Inserir()
     }
 
 
-    var clientes = ClienteDAO.List();
+
+    List<Cliente>? clientes = null;
+
 
     Console.WriteLine("Deseja incluir o cliente??");
 
@@ -144,8 +261,16 @@ static void Inserir()
 
     if (optionCli != "n")
     {
-        var menu = new Menu(clientes.ToArray(), "Selecione o Cliente");
-        cliente = menu.GetOption() as Cliente;
+        try
+        {
+            clientes = ClienteDAO.List();
+            var menu = new Menu(clientes.ToArray(), "Selecione o Cliente");
+            cliente = menu.GetOption() as Cliente;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Não foi possível obter os clientes da base de dados: " + ex.Message);
+        }
     }
 
 
@@ -164,7 +289,14 @@ static void Inserir()
         Recebimentos = recebimentos
     };
 
-    VendaDAO.Insert(venda);
+    try
+    {
+        VendaDAO.Insert(venda);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erro: " + ex.Message);
+    }
 }
 
 static void Listar()
@@ -175,7 +307,17 @@ static void Listar()
     Console.WriteLine("listar Venda");
     Console.WriteLine("============");
 
-    var vendas = VendaDAO.List();
+    List<Venda>? vendas = null;
+    try
+    {
+        vendas = VendaDAO.List();
+
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erro: " + ex.Message);
+        return;
+    }
 
     if (vendas is not null && vendas.Count > 0)
     {
@@ -197,29 +339,62 @@ static void Atualizar()
     Console.WriteLine("Atualizar Venda");
     Console.WriteLine("===============");
 
-    var vendas = VendaDAO.List();
+    List<Venda>? vendas = null;
 
+    try
+    {
+        vendas = VendaDAO.List();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erro: " + ex.Message);
+        return;
+    }
+
+    if (vendas.Count() == 0)
+    {
+        Console.WriteLine("Não foram encontradas vendas");
+        return;
+    }
     var menuVendas = new Menu(vendas.ToArray(), "Selecione a venda que deseja Atualizar");
 
     var option = menuVendas.GetOption() as Venda;
 
     if (option is null)
     {
-        Console.WriteLine("A venda não pode ser encontrada");
+        Console.WriteLine("Entrada inválida, abortando...");
         return;
     }
 
+
     Console.WriteLine("Insira o valor da venda");
-    var valor = Convert.ToDouble(Console.ReadLine());
+    if (!double.TryParse(Console.ReadLine(), out var valor))
+    {
+        Console.WriteLine("Entrada inválida, abortando...");
+        return;
+    }
+
     Console.WriteLine("Insira o desconto");
-    var desconto = Convert.ToDouble(Console.ReadLine());
+    if (!double.TryParse(Console.ReadLine(), out var desconto))
+    {
+        Console.WriteLine("Entrada inválida, abortando...");
+        return;
+    }
 
     var valorFinal = valor - valor * (desconto / 100);
 
     Console.WriteLine("Informe o tipo");
     var tipo = Console.ReadLine();
 
-    var clientes = ClienteDAO.List();
+    var totalPOarcelas = option.TotalParcelas;
+    Console.WriteLine("Informe A quantidade de parcelas");
+
+    if (!int.TryParse(Console.ReadLine(), out var totalParcelas))
+    {
+        Console.WriteLine("Entrada inválida, abortando...");
+        return;
+    }
+
 
     Console.WriteLine("Deseja incluir o cliente??");
 
@@ -229,13 +404,22 @@ static void Atualizar()
 
     if (optionCli != "n")
     {
-        var menu = new Menu(clientes.ToArray(), "Selecione o Cliente");
-        cliente = menu.GetOption() as Cliente;
+        List<Cliente>? clientes = null;
+
+        try
+        {
+            clientes = ClienteDAO.List();
+            var menu = new Menu(clientes.ToArray(), "Selecione o Cliente");
+            cliente = menu.GetOption() as Cliente;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erro: " + ex.Message);
+        }
+
     }
 
-    var totalPOarcelas = option.TotalParcelas;
-    Console.WriteLine("Informe A quantidade de parcelas");
-    var totalParcelas = int.Parse(Console.ReadLine());
+
 
     option.Cliente = cliente;
     option.DataVenda = DateTime.Today;
@@ -260,15 +444,37 @@ static void Deletar()
     Console.WriteLine("Deletar Venda");
     Console.WriteLine("=============");
 
-    var vendas = VendaDAO.List();
+    List<Venda>? vendas = null;
+    Venda? option = null;
+    try
+    {
+        vendas = VendaDAO.List();
+        if (vendas.Count() == 0)
+        {
+            Console.WriteLine("Não foram encontradas vendas");
+            return;
+        }
+        var menuVendas = new Menu(vendas.ToArray(), "Selecione a venda que deseja Deletar");
+        option = menuVendas.GetOption() as Venda;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Não foi possível obter as vendas: " + ex.Message);
+    }
 
-    var menuVendas = new Menu(vendas.ToArray(), "Selecione a venda que deseja Deletar");
 
-    var option = menuVendas.GetOption() as Venda;
+
 
     if (option is not null)
     {
-        VendaDAO.Delete(option);
+        try
+        {
+            VendaDAO.Delete(option);
+        }
+        catch
+        {
+            Console.WriteLine("Não foi possível excluir a venda");
+        }
     }
 
 
