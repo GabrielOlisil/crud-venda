@@ -21,7 +21,7 @@ namespace CrudVenda.Dao
         /// <exception cref="InvalidOperationException"></exception>
         public static void Update(Venda venda)
         {
-            const string query = "UPDATE vendas SET data_venda = @dataVenda, valor_total = @valorTotal, hora = @hora, total_parcelas = @totalParcelas, desconto = @desconto, valor_final = @valorFinal, tipo = @tipo  WHERE id_venda = @idVenda";
+            const string query = "UPDATE vendas SET data_venda = @dataVenda, valor_total = @valorTotal, hora = @hora, total_parcelas = @totalParcelas, desconto = @desconto, valor_final = @valorFinal, tipo = @tipo, fk_cliente = @idCliente  WHERE id_venda = @idVenda";
 
             try
             {
@@ -34,6 +34,7 @@ namespace CrudVenda.Dao
                 command.Parameters.AddWithValue("@desconto", venda.Desconto);
                 command.Parameters.AddWithValue("@valorFinal", venda.ValorFinal);
                 command.Parameters.AddWithValue("@tipo", venda.Tipo);
+                command.Parameters.AddWithValue("@idCliente", venda.Cliente?.Id);
 
                 int affectedRows = command.ExecuteNonQuery();
 
